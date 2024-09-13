@@ -1,10 +1,10 @@
 CC=go
 
 build:
-	go build main.go
+	go build -o bin/nippy ./cmd/nippy
 
 run:
-	./main
+	go run ./cmd/nippy
 
-run_with_args:
-	./main -build=true
+test:
+	go test ./..

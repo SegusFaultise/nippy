@@ -1,8 +1,10 @@
 package main
 
 import (
-    "flag"
     "fmt"
+    "github.com/nippy/pkg/tokenizer"
+    "github.com/nippy/pkg/parsing"
+    "github.com/nippy/pkg/regexops"
 )
 
 func main() {
