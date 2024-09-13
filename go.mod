@@ -1,3 +1,3 @@
-module github.com/NippyInGo
+module nippy
 
 go 1.23.0
