@@ -1,6 +1,8 @@
-package tokenizer
+package internal
 
-import "fmt"
+import (
+    "fmt"
+)
 
 
 type TokenTypes int
@@ -82,32 +84,38 @@ func (token_type TokenTypes) to_string() string {
 
 
 func token_type_insert(token_struct []Token, token_value string, token_type TokenTypes) []Token {
+    check_for_empty_string(token_value)
+
     new_token := Token{token_value: token_value, token_type: token_type}
     token_struct = append(token_struct, new_token)
 
     return token_struct
 }
 
-func token_struct_print(token_struct []Token) {
+func PrintTokens(token_struct []Token) {
     for _, token := range token_struct {
         fmt.Printf("Token Value: %s, Token Type %s\n", token.token_value, token.token_type.to_string())
     }
 }
 
-func tokenize(token_struct []Token, non_tokenized_stream []string) []Token {
-    for i := 0; i < len(non_tokenized_stream); i++{
-        if is_integer(non_tokenized_stream[i]) {
-            token_struct = token_type_insert(token_struct, non_tokenized_stream[i], INT)   
+func Tokenize(token_struct []Token, non_tokenized_stream []rune) []Token {
+    check_for_empty_string(string(non_tokenized_stream))
+
+    for i := 0; i < len(non_tokenized_stream); i++ {
+        if is_integer(string(non_tokenized_stream[i])) {
+            token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), INT)   
         } else {
             switch non_tokenized_stream[i] {
-            case "+":
-                token_struct = token_type_insert(token_struct, non_tokenized_stream[i], ADDITION_OP)
-            case "-":
-                token_struct = token_type_insert(token_struct, non_tokenized_stream[i], MINUS_OP)
-            case "*":
-                token_struct = token_type_insert(token_struct, non_tokenized_stream[i], MULTIPLICATION_OP)
-            case "/":
-                token_struct = token_type_insert(token_struct, non_tokenized_stream[i], DIVIDE_OP)
+            case '+':
+                token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), ADDITION_OP)
+            case '-':
+                token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), MINUS_OP)
+            case '*':
+                token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), MULTIPLICATION_OP)
+            case '/':
+                token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), DIVIDE_OP)
+            case '%':
+                token_struct = token_type_insert(token_struct, string(non_tokenized_stream[i]), MODULO_OP)
             default:
 
             }

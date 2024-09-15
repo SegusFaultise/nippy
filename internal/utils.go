@@ -1,18 +1,24 @@
-package utils
+package internal
 
 import (
     "strconv"
     "regexp"
+    "fmt"
 )
 
+func check_for_empty_string(str string) {
+    if len(str) > 0 {
+        fmt.Errorf("Token value [ '%s' ] is empty!", str)
+    }
+}
 
 func is_integer(str string) bool {
-    extracted_int := regexp.MustCompile(int_regexp) 
+    extracted_int := regexp.MustCompile(GET_INT) 
 
     return extracted_int.MatchString(str)
 }
 
-func stringToInt(str string) int {
+func string_to_int(str string) int {
     val, _ := strconv.Atoi(str)
     return val
 }

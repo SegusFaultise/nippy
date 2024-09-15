@@ -1,5 +1,4 @@
-package parsing
-
+package internal
 
 type ASTNode interface {
     Evaluate() int
@@ -34,6 +33,8 @@ func (b *BinOpNode) Evaluate() int {
         return b.left.Evaluate() * b.right.Evaluate()
     case DIVIDE_OP:
         return b.left.Evaluate() / b.right.Evaluate()
+    case MODULO_OP:
+        return b.left.Evaluate() % b.right.Evaluate()
     default:
         panic("Unkown operation")
     }
@@ -45,7 +46,7 @@ func (parser *Parser) parse_data_types() ASTNode {
     if token.token_type == INT {
         parser.position++
 
-        return &NumberNode{value: stringToInt(token.token_value)}
+        return &NumberNode{value: string_to_int(token.token_value)}
     }
 
     panic("Expected a int")
@@ -55,7 +56,8 @@ func (parser *Parser) parse_high_precedence() ASTNode {
     node := parser.parse_data_types()
 
     for parser.tokens[parser.position].token_type == MULTIPLICATION_OP ||
-    parser.tokens[parser.position].token_type == DIVIDE_OP {
+    parser.tokens[parser.position].token_type == DIVIDE_OP ||
+    parser.tokens[parser.position].token_type == MODULO_OP {
         op := parser.tokens[parser.position].token_type
 
         parser.position++
@@ -93,3 +95,10 @@ func (parser *Parser) parse_low_precedence() ASTNode {
     return node
 }
 
+func Parse(token []Token) int {
+    parser := Parser{tokens: token} 
+
+    ast := parser.parse_low_precedence()
+
+    return ast.Evaluate()
+}

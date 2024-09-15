@@ -2,9 +2,9 @@ package main
 
 import (
     "fmt"
-    "github.com/nippy/pkg/tokenizer"
-    "github.com/nippy/pkg/parsing"
-    "github.com/nippy/pkg/regexops"
+    "flag"
+
+    "github.com/SegusFaultise/nippy/internal"
 )
 
 func main() {
@@ -13,18 +13,16 @@ func main() {
     flag.Parse()
     fmt.Println("build: ", *word_ptr)
 
-    var tokens []Token
-
-    test_stream := []string{"2", "*", "2", "/", "2", "+", "5"}
-
-    tokens = tokenize(tokens, test_stream)
-
-    token_struct_print(tokens)
-
-    parser := Parser{tokens: tokens}
-    ast := parser.parse_low_precedence()
+    var tokens []internal.Token
     
-    println(2 * 2 / 2 + 5)
+    file_data := internal.ReadFile("./main.nip")
+    runes := []rune(file_data)
 
-    fmt.Println("Result: ", ast.Evaluate())
+    tokens = internal.Tokenize(tokens, runes)
+
+    internal.PrintTokens(tokens)
+    
+    result := internal.Parse(tokens)
+
+    fmt.Println("Result: ", result)
 }
